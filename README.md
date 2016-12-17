@@ -1,2 +1,5 @@
-# PersonalWebsiteTouchUp
-Changing personal website to use materialize. Seeing how it goes
+# Personal Website TouchUp
+Changing personal website to use materialize.
+Lets see how it goes.
+
+Find Materialize @ materializecss.com
