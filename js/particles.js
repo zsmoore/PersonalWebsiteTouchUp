@@ -52,7 +52,7 @@ function Particle (initX, initY, initXVelocity, startVelY) {
 
     //Attraction function for getting particles to attract each other
     this.attract = function(particle2) {
-
+        
         //If in  a certain threshold start moving towards each other
         if(this.x - particle2.x < 0){
             this.vel.x += .1;
@@ -79,24 +79,13 @@ function Particle (initX, initY, initXVelocity, startVelY) {
             }
         }  
     }
-
-    //Speedcheck so we don't go too fast, resets speed
-    this.speedCheck = function() { 
-
-        if(Math.abs(this.vel.x) > 5){
-            this.vel.x = 0;
-        }
-        if(Math.abs(this.vel.y) > 5){
-            this.vel.y = 0;
-        }
-
-    }
+ 
 }
 
 //Set up array of particles
 var particles = [];
 //Create each particle and add to array
-for (var i = 0; i < canvas.width * canvas.height / (65*65); i++) {
+for (var i = 0; i < canvas.width * canvas.height / (90*90); i++) {
     particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
 }
 
@@ -107,7 +96,6 @@ function update() {
     for (var frame = 0; frame * 60 < diff; frame++) {
         for (var i = 0; i < particles.length; i++) {
             particles[i].update(canvas);
-            particles[i].speedCheck();
         }
     }
     lastTime = Date.now();
@@ -159,7 +147,7 @@ function draw() {
                 }
 
                 //Handle attraction functionality
-                if(xDist < 15 && yDist < 15){
+                if(xDist < 30 && yDist < 30){
                     particle.attract(particle2);
                     particle2.attract(particle);
                 }
