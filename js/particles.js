@@ -64,27 +64,27 @@ function Particle (initX, initY, initXVelocity, startVelY) {
        
         //If in  a certain threshold start moving towards each other
         if(this.x - particle2.x < 0){
-            this.vel.x += .1;
-            particle2.vel.x += -.1;
+            this.vel.x += .01;
+            particle2.vel.x += -.01;
             if(this.y - particle2.y < 0){
-                this.vel.y += .1;
-                particle2.vel.y += -.1;
+                this.vel.y += .01;
+                particle2.vel.y += -.01;
             }
             else{
-                this.vel.y += -.1;
-                particle2.vel.y += .1;
+                this.vel.y += -.01;
+                particle2.vel.y += .01;
             }
         }
         else{
-            this.vel.x += -.1;
-            particle2.vel.x += .1;
+            this.vel.x += -.01;
+            particle2.vel.x += .01;
             if(this.y - particle2.y < 0){
-                this.vel.y += .1;
-                particle2.vel.y += -.1;
+                this.vel.y += .01;
+                particle2.vel.y += -.01;
             }
             else{
-                this.vel.y += -.1;
-                particle2.vel.y += .1;
+                this.vel.y += -.01;
+                particle2.vel.y += .01;
             }
         }  
     }
