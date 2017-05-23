@@ -23,9 +23,11 @@ function Particle (initX, initY, initXVelocity, startVelY) {
 
     //Velocity as a pair obj randome unless specified
     this.vel = {
-        x: initXVelocity || Math.random()*2  - 1,
-        y: startVelY || Math.random()*2 - 1
+        x: initXVelocity || Math.random() * 2  - 1,
+        y: startVelY || Math.random() * 2 - 1
     };
+
+    this.decreasing = false;
 
     //Update function that will move particle as well as boundary check
     this.update = function(canvas) {
@@ -37,6 +39,13 @@ function Particle (initX, initY, initXVelocity, startVelY) {
             this.vel.y = -this.vel.y ;
             //this.y = 5;
         }
+        /*//this.speedCheck();
+        if(Math.abs(this.vel.x) > 5){
+            this.vel.x = 0;
+        }
+        if(Math.abs(this.vel.y) > 5){
+            this.vel.y = 0;
+        }*/
         this.x += this.vel.x;
         this.y += this.vel.y;
     };
@@ -52,7 +61,7 @@ function Particle (initX, initY, initXVelocity, startVelY) {
 
     //Attraction function for getting particles to attract each other
     this.attract = function(particle2) {
-        
+       
         //If in  a certain threshold start moving towards each other
         if(this.x - particle2.x < 0){
             this.vel.x += .1;
@@ -79,13 +88,41 @@ function Particle (initX, initY, initXVelocity, startVelY) {
             }
         }  
     }
+    
+    /*//Makes sure speed does not go too high
+    this.speedCheck = function() {
+        
+        if(this.decreasing == true){
+            //check x
+            if(this.vel.x > 2.5){
+                this.vel.x -= .3;                
+            }
+            else if(this.vel.x < -2.5){
+                this.vel.x += .3;
+            }
+            //check y
+            if(this.vel.y > 2.5){
+                this.vel.y -= .3;
+            }
+            else if(this.vel.y < -2.5){
+                this.vel.y += .3;
+            }
+            //done decreasing
+            if(Math.abs(this.vel.x) <= 2.5 && Math.abs(this.vel.y) <= 2.5){
+                this.decreasing = false;
+            }
+        }
+        else if(Math.abs(this.vel.x) > 5 || Math.abs(this.vel.y) > 5){
+                this.decreasing = true;
+        }
+    }*/
  
 }
 
 //Set up array of particles
 var particles = [];
 //Create each particle and add to array
-for (var i = 0; i < canvas.width * canvas.height / (90*90); i++) {
+for (var i = 0; i < canvas.width * canvas.height / (75*75); i++) {
     particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
 }
 
@@ -147,9 +184,10 @@ function draw() {
                 }
 
                 //Handle attraction functionality
-                if(xDist < 30 && yDist < 30){
+                if(xDist < 25 && yDist < 25){
                     particle.attract(particle2);
                     particle2.attract(particle);
+                    
                 }
             }
             else{
