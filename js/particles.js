@@ -3,15 +3,23 @@ var canvas = document.querySelector("canvas");
 canvas.width = document.body.offsetWidth;
 canvas.height = document.body.scrollHeight;
 var ctx = canvas.getContext("2d");
-var background = "#FFFFFF";
-var particleColor = "#3533FF";
-
+var background = "#fbf1c7";
+var particleColor = "#3c3836";
+var fpsInterval = 1000/30;
+var now, then, elapsed;
+then = Date.now();
 //Define looping function that will repeat until website is closed
 function loop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    update();
-    draw();
+//    ctx.clearRect(0, 0, canvas.width, canvas.height);
     requestAnimationFrame(loop);
+
+    now = Date.now();
+    elapsed = now - then;
+    if(elapsed > fpsInterval){
+        then = now - (elapsed % fpsInterval);
+        update();
+        draw();
+    }
 }
 
 //Define particle object that will be moving on canvas
@@ -33,19 +41,10 @@ function Particle (initX, initY, initXVelocity, startVelY) {
     this.update = function(canvas) {
         if (this.x > canvas.width - 5 || this.x < 5) {
             this.vel.x = -this.vel.x;
-            //this.x = 5;
         }
         if (this.y > canvas.height -5  || this.y < 5) {
             this.vel.y = -this.vel.y ;
-            //this.y = 5;
         }
-        /*//this.speedCheck();
-        if(Math.abs(this.vel.x) > 5){
-            this.vel.x = 0;
-        }
-        if(Math.abs(this.vel.y) > 5){
-            this.vel.y = 0;
-        }*/
         this.x += this.vel.x;
         this.y += this.vel.y;
     };
@@ -87,55 +86,21 @@ function Particle (initX, initY, initXVelocity, startVelY) {
                 particle2.vel.y += .01;
             }
         }  
-    }
-    
-    /*//Makes sure speed does not go too high
-    this.speedCheck = function() {
-        
-        if(this.decreasing == true){
-            //check x
-            if(this.vel.x > 2.5){
-                this.vel.x -= .3;                
-            }
-            else if(this.vel.x < -2.5){
-                this.vel.x += .3;
-            }
-            //check y
-            if(this.vel.y > 2.5){
-                this.vel.y -= .3;
-            }
-            else if(this.vel.y < -2.5){
-                this.vel.y += .3;
-            }
-            //done decreasing
-            if(Math.abs(this.vel.x) <= 2.5 && Math.abs(this.vel.y) <= 2.5){
-                this.decreasing = false;
-            }
-        }
-        else if(Math.abs(this.vel.x) > 5 || Math.abs(this.vel.y) > 5){
-                this.decreasing = true;
-        }
-    }*/
- 
+    }     
 }
 
 //Set up array of particles
 var particles = [];
 //Create each particle and add to array
-for (var i = 0; i < canvas.width * canvas.height / (75*75); i++) {
+for (var i = 0; i < canvas.width * canvas.height / (85*85); i++) {
     particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
 }
 
 //Global update to call update on each particle
-var lastTime = Date.now();
 function update() {
-    var diff = Date.now() - lastTime;
-    for (var frame = 0; frame * 60 < diff; frame++) {
-        for (var i = 0; i < particles.length; i++) {
-            particles[i].update(canvas);
-        }
+    for (var i = 0; i < particles.length; i++) {
+        particles[i].update(canvas);
     }
-    lastTime = Date.now();
 }
 
 
@@ -169,16 +134,22 @@ function draw() {
                     particle2.draw(ctx, canvas);
                     ctx.beginPath();
                     ctx.globalAlpha = 1 - (Math.max(xDist, yDist)/100);
+                    ctx.lineWidth = 2;
                     ctx.moveTo(particle.x, particle.y);
                     ctx.lineTo(particle2.x, particle2.y);
-                    if(i % 3 == 0){
-                        ctx.strokeStyle="red";
-                    }
-                    else if(i % 3 == 1){
-                        ctx.strokeStyle="yellow";
-                    }
-                    else{
-                        ctx.strokeStyle="black";
+                    var rand = Math.floor(Math.random() * 6);
+                    if(rand == 0){
+                        ctx.strokeStyle="#cc241d";
+                    } else if(rand == 2){
+                        ctx.strokeStyle="#98971a";
+                    } else if(rand == 3){
+                        ctx.strokeStyle="#d79921";
+                    } else if(rand == 4){
+                        ctx.strokeStyle="#458588";
+                    } else if(rand == 5){
+                        ctx.strokeStyle="#b16286";
+                    } else{
+                        ctx.strokeStyle="#689d6a";
                     }
                     ctx.stroke();
                 }
@@ -208,5 +179,6 @@ function resize() {
 window.addEventListener('orientationchange', resize, true);
 window.addEventListener('resize', resize, true);
 
+draw();
 //Loop nonstop
 loop();
